@@ -1,41 +1,14 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 
-from app.archtool_conf.bundle_project import todo_service, user_service
+from app.archtool_conf.bundle_project import init_app, init_db
 
 app = FastAPI(title="Todo App", version="1.0.0")
+init_app(app)
 
 
-class UserCreate(BaseModel):
-    name: str
-
-
-class TodoCreate(BaseModel):
-    title: str
-    user_id: int
-
-
-@app.post("/users", response_model=dict)
-def create_user(payload: UserCreate):
-    return user_service.create_user(payload.name)
-
-
-@app.get("/users", response_model=list[dict])
-def get_users():
-    return user_service.get_users()
-
-
-@app.post("/todos", response_model=dict)
-def create_todo(payload: TodoCreate):
-    try:
-        return todo_service.create_todo(payload.title, payload.user_id)
-    except ValueError as exc:
-        raise HTTPException(status_code=404, detail="User not found") from exc
-
-
-@app.get("/todos", response_model=list[dict])
-def get_todos():
-    return todo_service.get_todos()
+@app.on_event("startup")
+async def startup() -> None:
+    await init_db()
 
 
 if __name__ == "__main__":

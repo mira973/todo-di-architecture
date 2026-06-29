@@ -4,3 +4,17 @@ __pycache__/
 .idea/
 __pycache__/
 *.pyc
+
+__pycache__/
+*.pyc
+.venv/
+.idea/
+todo.db
+*.db
+
+__pycache__/
+*.pyc
+.venv/
+.idea/
+todo.db
+*.db

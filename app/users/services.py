@@ -1,14 +1,21 @@
+from uuid import UUID
+
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.users.dtos import CreateUserDTO
 from app.users.interfaces import UserRepoABC, UserServiceABC
 
 
 class UserService(UserServiceABC):
     repo: UserRepoABC
 
-    def create_user(self, name: str) -> dict:
-        return self.repo.add(name)
+    __annotations__ = {"repo": UserRepoABC}
 
-    def get_users(self) -> list[dict]:
-        return self.repo.get_all()
+    async def create_user(self, session: AsyncSession, dto: CreateUserDTO) -> dict:
+        return await self.repo.create(session, dto)
 
-    def user_exists(self, user_id: int) -> bool:
-        return self.repo.exists(user_id)
+    async def get_users(self, session: AsyncSession) -> list[dict]:
+        return await self.repo.list(session)
+
+    async def user_exists(self, session: AsyncSession, user_id: int | UUID | str) -> bool:
+        return await self.repo.exists(session, user_id)
