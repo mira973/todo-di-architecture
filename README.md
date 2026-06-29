@@ -1,39 +1,39 @@
-# 📝 ToDo App: FastAPI + archtool DI
+#  ToDo App: FastAPI + archtool DI
 
-Минимальный учебный backend-проект на FastAPI, который демонстрирует archtool-based dependency injection без SQLAlchemy, web_fractal и async-слоя.
+Минимальный рабочий FastAPI-проект с archtool-based dependency injection и in-memory storage.
 
-## Что здесь есть
+## Что здесь используется
 
-- FastAPI endpoints
+- FastAPI
 - archtool DependencyInjector
-- AppModule-based module discovery
+- AppModule
 - repository/service layers
-- in-memory storage
-- DI through class annotations
+- DI через class annotations
+- users/todos modules
+- interfaces.py, repos.py, services.py
 
 ## Структура проекта
 
 ```text
-todo_app/
-├── app/
-│   ├── archtool_conf/
-│   │   └── bundle_project.py
-│   ├── users/
-│   │   ├── interfaces.py
-│   │   ├── repos.py
-│   │   └── services.py
-│   └── todos/
-│       ├── interfaces.py
-│       ├── repos.py
-│       └── services.py
-└── entrypoints/
-    └── run.py
+app/
+├── archtool_conf/
+│   └── bundle_project.py
+├── users/
+│   ├── interfaces.py
+│   ├── repos.py
+│   └── services.py
+└── todos/
+    ├── interfaces.py
+    ├── repos.py
+    └── services.py
+
+entrypoints/
+└── run.py
 ```
 
 ## Запуск
 
 ```bash
-pip install archtool fastapi uvicorn
 python -m entrypoints.run
 ```
 
