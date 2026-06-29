@@ -1,6 +1,14 @@
 from abc import abstractmethod
+from abc import ABC
 
 from archtool.layers.default_layer_interfaces import ABCRepo, ABCService
+
+try:
+    from archtool.layers.default_layer_interfaces import ABCController
+except ImportError:  # pragma: no cover
+    ABCController = ABC
+
+from .dtos import CreateUserDTO
 
 
 class UserRepoABC(ABCRepo):
@@ -28,4 +36,14 @@ class UserServiceABC(ABCService):
 
     @abstractmethod
     def user_exists(self, user_id: int) -> bool:
+        ...
+
+
+class UserControllerABC(ABCController):
+    @abstractmethod
+    def create_user(self, dto: CreateUserDTO) -> dict:
+        ...
+
+    @abstractmethod
+    def get_users(self) -> list[dict]:
         ...

@@ -4,12 +4,14 @@ from archtool.dependency_injector import DependencyInjector
 from archtool.global_types import AppModule
 from archtool.layers.default_layers import DomainLayer, InfrastructureLayer
 
-from app.todos.interfaces import TodoRepoABC, TodoServiceABC
+from app.todos.interfaces import TodoControllerABC, TodoRepoABC, TodoServiceABC
 from app.todos.repos import TodoRepo
 from app.todos.services import TodoService
-from app.users.interfaces import UserRepoABC, UserServiceABC
+from app.users.interfaces import UserControllerABC, UserRepoABC, UserServiceABC
 from app.users.repos import UserRepo
 from app.users.services import UserService
+from app.users.controllers import UserController
+from app.todos.controllers import TodoController
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
@@ -32,6 +34,9 @@ user_service.repo = user_repo
 todo_service.repo = todo_repo
 todo_service.user_service = user_service
 
-__all__ = ["user_service", "todo_service"]
+user_controller = UserController()
+todo_controller = TodoController()
+user_controller.service = user_service
+todo_controller.service = todo_service
 
-__all__ = ["user_service", "todo_service"]
+__all__ = ["user_controller", "todo_controller"]
