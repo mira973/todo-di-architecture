@@ -1,99 +1,61 @@
-# 📝 ToDo App: FastAPI + Layered Architecture
+# 📝 ToDo App: FastAPI + archtool DI
 
-Учебный Backend-проект на **FastAPI**, демонстрирующий разделение ответственности, чистую архитектуру и реализацию ручного внедрения зависимостей (**Dependency Injection**).
+Минимальный учебный backend-проект на FastAPI, который демонстрирует archtool-based dependency injection без SQLAlchemy, web_fractal и async-слоя.
 
----
+## Что здесь есть
 
-## 🚀 Описание/цель
+- FastAPI endpoints
+- archtool DependencyInjector
+- AppModule-based module discovery
+- repository/service layers
+- in-memory storage
+- DI through class annotations
 
-Проект представляет собой API для управления списком задач. Основной акцент сделан не на функционале, а на **архитектурных решениях**:
-- **Принципов SOLID** (особенно Dependency Inversion).
--**Разделения ответственности между модулями.**
-- **Построения масштабируемых приложений на FastAPI.**
-- **Layered Architecture**: Четкое разделение на Repository, Service и API слои.
-- **Manual DI**: Зависимости связываются вручную, что позволяет легко тестировать и заменять компоненты.
-- **In-memory Storage**: Работа без внешней БД для упрощения демонстрации архитектуры.
-
----
-
-##  Особенности
-
-*   ✅ **Repository Layer**: Прямая работа с данными (хранилище).
-*   ✅ **Service Layer**: Бизнес-логика, валидация и координация действий.
-*   ✅ **API Layer**: Обработка HTTP-запросов и формирование ответов.
-*   ✅ **Manual DI**: Использование "контейнера" для прокидывания зависимостей.
-*   ✅ **Clean Code**: Легко расширяемая и тестируемая структура.
-
----
-
-##  Структура проекта/запуск и примеры использывания
-
-Запуск проекта
-1. Установка зависимостей
-Убедитесь, что у вас установлен Python 3.8+.
-code
-Bash
-pip install fastapi uvicorn
-2. Запуск сервера
-Вы можете запустить проект двумя способами:
-code
-Bash
-# Через скрипт запуска
-python run.py
-
-# Или напрямую через uvicorn
-uvicorn main:app --reload
-3. Интерактивная документация
-После запуска API доступно по адресу:
-Swagger UI: http://127.0.0.1:8000/docs
-
- Эндпоинты API
-Метод	Эндпоинт	Описание
-POST	/users	Создание нового пользователя
-GET	/users	Получение списка всех пользователей
-POST	/todos	Создание новой задачи для пользователя
-GET	/todos	Получение списка всех задач
- Архитектура и Dependency Injection
-Слои (Layers)
-Repository: Инкапсулирует логику хранения. Методы: add(), get_all().
-Service: Обрабатывает логику. Например, перед созданием задачи TodoService проверяет, существует ли пользователь через UserService.
-API (FastAPI): Принимает JSON, вызывает нужный метод сервиса и возвращает ответ.
-Схема внедрения зависимостей (DI)
-Связи настраиваются в файле arch_demo.py:
-UserRepo ⮕ UserService ⮕ FastAPI Endpoints
-TodoRepo ⮕ TodoService ⮕ FastAPI Endpoints
-
- Пример использования
-1. Создание пользователя
-Запрос: POST /users
-code
-JSON
-{
-  "name": "Alex"
-}
-2. Создание задачи
-Запрос: POST /todos
-code
-JSON
-{
-  "title": "Изучить Clean Architecture",
-  "user_id": 1
-}
+## Структура проекта
 
 ```text
-todo-app/
-├── main.py            # Точка входа FastAPI, описание эндпоинтов
-├── run.py             # Скрипт для запуска Uvicorn сервера
-├── arch_demo.py       # DI Контейнер (сборка всех слоев воедино)
-│
-├── repositories/      # Слой работы с данными
-│   ├── user_repo.py
-│   └── todo_repo.py
-│
-├── services/          # Слой бизнес-логики
-│   ├── user_service.py
-│   └── todo_service.py
-└── README.md
+todo_app/
+├── app/
+│   ├── archtool_conf/
+│   │   └── bundle_project.py
+│   ├── users/
+│   │   ├── interfaces.py
+│   │   ├── repos.py
+│   │   └── services.py
+│   └── todos/
+│       ├── interfaces.py
+│       ├── repos.py
+│       └── services.py
+└── entrypoints/
+    └── run.py
 ```
+
+## Запуск
+
+```bash
+pip install archtool fastapi uvicorn
+python -m entrypoints.run
+```
+
+Swagger UI будет доступен по адресу:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+## Endpoints
+
+- POST /users
+- GET /users
+- POST /todos
+- GET /todos
+
+## Поведение
+
+- можно создать пользователя;
+- можно получить список пользователей;
+- можно создать todo только для существующего пользователя;
+- можно получить список todo.
+
 
 
